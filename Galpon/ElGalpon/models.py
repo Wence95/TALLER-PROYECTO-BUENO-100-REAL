@@ -2,99 +2,130 @@ from unittest.util import _MAX_LENGTH
 from django.db import models
 
 class Tazones(models.Model):
-    NombreT = models.CharField(max_length=35)
-    TamañoT = models.CharField(max_length=10)
-    ColorT = models.CharField(max_length=20)
+    Nombre = models.CharField(max_length=35)
+    Tamaño = models.CharField(max_length=10)
+    Color = models.CharField(max_length=20)
+    Stock = models.CharField(max_length=35)
 
     def tazon(self):
         cadena = "{0} {1} {2}"
-        return  cadena.format(self.NombreT,self.TamañoT,self.ColorT)
+        return  cadena.format(self.Nombre,self.Tamaño,self.Color)
 
     def __str__(self):
         return self.tazon()
 
 class Relojes(models.Model):
-    NombreR = models.CharField(max_length=35)
-    ModeloR = models.CharField(max_length=35)
+    Nombre = models.CharField(max_length=35)
+    Modelo = models.CharField(max_length=35)
+    Stock = models.CharField(max_length=35)
 
     def reloj(self):
         cadena = "{0} {1}"
-        return  cadena.format(self.NombreR,self.ModeloR)
+        return  cadena.format(self.Nombre,self.Modelo)
 
     def __str__(self):
         return self.reloj()
 
 class Imanes(models.Model):
-    NombreI = models.CharField(max_length=35)
+    Nombre = models.CharField(max_length=35)
+    Stock = models.CharField(max_length=35)
 
     def iman(self):
          cadena = "{0}"
-         return  cadena.format(self.NombreI)
+         return  cadena.format(self.Nombre)
 
     def __str__(self):
         return self.iman()
 
 class Llaveros(models.Model):    
-    NombreL = models.CharField(max_length=35)
+    Nombre = models.CharField(max_length=35)
+    Stock = models.CharField(max_length=35)
 
     def llavero(self):
          cadena = "{0}"
-         return  cadena.format(self.NombreL)
+         return  cadena.format(self.Nombre)
 
     def __str__(self):
         return self.llavero()
     
 class Portavasos(models.Model):    
-    NombreP = models.CharField(max_length=35)
-    ColorP = models.CharField(max_length=35)
-    TamañoP = models.CharField(max_length=20)
+    Nombre = models.CharField(max_length=35)
+    Color = models.CharField(max_length=35)
+    Tamaño = models.CharField(max_length=20)
+    Stock = models.CharField(max_length=35)
 
     def portavaso(self):
          cadena = "{0} {1} {2}"
-         return  cadena.format(self.NombreP, self.ColorP, self.TamañoP)
+         return  cadena.format(self.Nombre, self.Color, self.Tamaño)
 
     def __str__(self):
         return self.portavaso()
 
 class Jardineria(models.Model):    
-    TipoJ = models.CharField(max_length=35)
-    NombreJ= models.CharField(max_length=35)
+    Tipo = models.CharField(max_length=35)
+    Nombre= models.CharField(max_length=35)
+    Stock = models.CharField(max_length=35)
 
     def jardineria(self):
          cadena = "{0} {1}"
-         return  cadena.format(self.TipoJ, self.NombreJ)
+         return  cadena.format(self.Tipo, self.Nombre)
 
     def __str__(self):
         return self.jardineria()
 
 class Cuadros(models.Model):    
-    NombreC = models.CharField(max_length=35)
+    Nombre = models.CharField(max_length=35)
+    Stock = models.CharField(max_length=35)
 
     def cuadro(self):
          cadena = "{0}"
-         return  cadena.format(self.NombreC)
+         return  cadena.format(self.Nombre)
 
     def __str__(self):
         return self.cuadro()
 
 class Cocina(models.Model):    
-    TipoC = models.CharField(max_length=35)
-    NombreC= models.CharField(max_length=35)
+    Tipo = models.CharField(max_length=35)
+    Nombre = models.CharField(max_length=35)
+    Stock = models.CharField(max_length=35)
 
     def cocina(self):
          cadena = "{0} {1}"
-         return  cadena.format(self.TipoC, self.NombreC)
+         return  cadena.format(self.Tipo, self.Nombre)
 
     def __str__(self):
         return self.cocina()
 
 class Choperos(models.Model):    
-    NombreCh = models.CharField(max_length=35)
-    TamañoCh = models.CharField(max_length=10)
+    Nombre = models.CharField(max_length=35)
+    Tamaño = models.CharField(max_length=10)
+    Stock = models.CharField(max_length=35)
 
     def chopero(self):
          cadena = "{0} {1}"
-         return  cadena.format(self.NombreCh, self.TamañoCh)
+         return  cadena.format(self.Nombre, self.Tamaño)
 
     def __str__(self):
         return self.chopero()
+class TiposDePrecio(models.Model):
+    Precio = models.CharField(max_length=35)
+
+    def precio(self):
+         cadena = "{0}"
+         return  cadena.format(self.Precio)
+
+    def __str__(self):
+        return self.precio()
+
+TiposDeProductos = ['Tazones', 'Relojes', 'Imanes', 'Llaveros', 'Portavasos', 'Jardineria', 'Cuadros', 'Cocina', 'Choperos']
+
+
+class Producto(models.Model):
+    Producto = models.ForeignKey(Tazones, Relojes, Imanes, Llaveros, Portavasos, Jardineria, Cuadros, Cocina, Choperos, null=False, blank=False, on_delete=models.CASCADE)
+    Precio = models.ForeignKey(TiposDePrecio, null=False, blank=False, on_delete=models.CASCADE)
+    Tipo = models.ForeignKey(TiposDeProductos, null=False, blank=False, on_delete=models.CASCADE)
+    fechaIngreso = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        cadena = "{0} => {1}"
+        return cadena.format(self.Alumno, self.Curso)
